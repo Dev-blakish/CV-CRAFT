@@ -1,0 +1,17 @@
+.btn-main{
+  width: 150px;
+  height: 60px;
+  border: 3px solid rgb(90, 73, 204);
+  border-radius: 45px;
+  transition: all 0.3s;
+  cursor: pointer;
+  background: white;
+  font-size: 1.2em;
+  font-weight: 550;
+}
+
+.btn-main:hover {
+  background:  linear-gradient(135deg, #e0c3fc, #8ec5fc);
+  color: white;
+  font-size: 1.5em;
+}
