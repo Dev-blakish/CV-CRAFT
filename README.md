@@ -11,7 +11,7 @@ FEATURES
 *Modern UI: Clean and elegant design using customized fonts.
 
 DEMO
-Link to Demo (Not available yet)
+Link to Demo (https://cv-craft-jet.vercel.app/)
 
 Technologies Used
 React: Frontend JavaScript library for building UI components.
