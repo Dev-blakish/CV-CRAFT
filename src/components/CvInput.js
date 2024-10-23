@@ -1,11 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Formik, Form, Field, FieldArray, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../App.css';
 
-function InputPage({ onSubmit }) {
-  const [profilePic, setProfilePic] = useState('');
+function InputPage({ onSubmit, initialData }) {
+  // Safely access initialData properties with optional chaining (?.) or provide default values
+  const [profilePic, setProfilePic] = useState(initialData?.profilePicture || '');
+
+  useEffect(() => {
+    if (initialData?.profilePicture) {
+      setProfilePic(initialData.profilePicture);
+    }
+  }, [initialData]);
 
   const handleProfilePictureChange = (event) => {
     const file = event.target.files[0];
@@ -14,13 +21,6 @@ function InputPage({ onSubmit }) {
       setProfilePic(reader.result);
     };
     reader.readAsDataURL(file);
-  };
-
-  const scrollToForm = () => {
-    const formElement = document.getElementById('cvForm');
-    if (formElement) {
-      formElement.scrollIntoView({ behavior: 'smooth' });
-    }
   };
 
   const validationSchema = Yup.object({
@@ -45,57 +45,71 @@ function InputPage({ onSubmit }) {
 
   return (
     <div className="container my-5">
-    <link href="https://fonts.googleapis.com/css2?family=Protest+Strike&family=Rowdies:wght@300;400;700&display=swap" rel="stylesheet"></link>
-
-    <div style={{ height: '90vh',  borderRadius:'10px', backgroundColor: 'SlateBlue', color:'white',  padding: '50px',  display: 'flex',
+      <div
+        style={{
+          height: '90vh',
+          borderRadius: '10px',
+          backgroundColor: 'SlateBlue',
+          color: 'white',
+          padding: '50px',
+          display: 'flex',
           flexDirection: 'column',
           justifyContent: 'center',
           alignItems: 'center',
-          textAlign: 'center', }}>
-      <h1
-        className="display-4"
-        style={{
-          fontFamily: "'Rowdies', sans-serif",
-          fontWeight: '700',
+          textAlign: 'center',
         }}
-  
       >
-        You're one step closer <br /> to achieving a simplified <br /> and well-structured CV layout.
-      </h1>
+        <h1
+          className="display-4"
+          style={{
+            fontFamily: "'Rowdies', sans-serif",
+            fontWeight: '700',
+          }}
+        >
+          You're one step closer <br /> to achieving a simplified <br /> and well-structured CV layout.
+        </h1>
 
-      <button 
-         className="btn-main"
-         style={{
-           fontFamily: "'Rowdies', sans-serif",
-           fontWeight: '90',
-
-         }}
-        onClick={scrollToForm}>
-        Start Now
-      </button>
-    </div>
+        <button
+          className="btn-main"
+          style={{
+            fontFamily: "'Rowdies', sans-serif",
+            fontWeight: '90',
+          }}
+          onClick={() => {
+            const formElement = document.getElementById('cvForm');
+            if (formElement) {
+              formElement.scrollIntoView({ behavior: 'smooth' });
+            }
+          }}
+        >
+          Start Now
+        </button>
+      </div>
 
       <div id="cvForm">
         <Formik
           initialValues={{
-            fullName: '',
-            jobTitle: '',
-            contact: { phone: '', email: '', website: '' },
-            summary: '',
-            skills: '',
-            certifications: '',
-            experience: '',
-            education: [{ institution: '', degree: '', year: '' }],
+            fullName: initialData?.fullName || '',
+            jobTitle: initialData?.jobTitle || '',
+            contact: {
+              phone: initialData?.contact?.phone || '',
+              email: initialData?.contact?.email || '',
+              website: initialData?.contact?.website || '',
+            },
+            summary: initialData?.summary || '',
+            skills: initialData?.skills || '',
+            certifications: initialData?.certifications || '',
+            experience: initialData?.experience || '',
+            education: initialData?.education || [{ institution: '', degree: '', year: '' }],
           }}
           validationSchema={validationSchema}
           onSubmit={(values) => {
             values.profilePicture = profilePic;
-            onSubmit(values);
+            onSubmit(values); // Send the data back when submitting
           }}
         >
           {({ values }) => (
             <Form className="my-4">
-    
               <div className="mb-3">
                 <label>Full Name</label>
                 <Field className="form-control" name="fullName" />
@@ -202,7 +216,7 @@ function InputPage({ onSubmit }) {
                             type="button"
                             className="btn btn-danger mb-2"
                             onClick={() => remove(index)}
-                            disabled={values.education.length === 1} 
+                            disabled={values.education.length === 1}
                           >
                             Remove
                           </button>

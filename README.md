@@ -10,7 +10,6 @@ FEATURES
 *Responsive Design: Built with Bootstrap for a smooth experience across devices.
 *Modern UI: Clean and elegant design using customized fonts.
 
-DEMO
 Link to Demo (https://cv-craft-jet.vercel.app/)
 
 Technologies Used
